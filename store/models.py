@@ -9,6 +9,9 @@ class Promotion(models.Model):
 # Collection ORM Model
 class Collection(models.Model):
   title= models.CharField(max_length= 255) 
+  # circular dependencie implimentation, 
+  # related_name= '+' -> do not create a reverse relationship in the related class
+  featured_product= models.ForeignKey('Product', on_delete= models.SET_NULL, null=True, related_name='+')
 
 # Product ORM Model
 class Product(models.Model):
