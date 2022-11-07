@@ -1,5 +1,10 @@
 from django.db import models
 
+# Promotion ORM Model
+class Promotion(models.Model):
+  # the reverse many-to-many relationship field name is product_set by default 
+  description= models.CharField(max_length= 255)
+  discount = models.FloatField()
 
 # Collection ORM Model
 class Collection(models.Model):
@@ -12,9 +17,13 @@ class Product(models.Model):
   price = models.DecimalField(max_digits= 6, decimal_places=2)
   invetory = models.IntegerField()
   last_update = models.DateTimeField(auto_now= True)
-  
+
   # many-to-one association with Collection model
   collection = models.ForeignKey(Collection,  on_delete= models.PROTECT)
+
+  # (many-to-many) association with Promotion model, 
+  # realated_name= 'field_name' is used for naming the related field on the other model of the relationship
+  promotions = models.ManyToManyField(Promotion)
 
 # Customer ORM Model
 class Customer(models.Model):
@@ -58,7 +67,7 @@ class OrderItem(models.Model):
   # many-to-one association with Product model
   product = models.ForeignKey(Product, on_delete= models.PROTECT) 
   quantity = models.PositiveSmallIntegerField()
-  unit_price = models.DecimalField(max_length= 6, decimal_places= 2)
+  unit_price = models.DecimalField(max_digits= 6, decimal_places= 2)
 
 
 # Address ORM Model
