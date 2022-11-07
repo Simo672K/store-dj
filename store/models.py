@@ -1,13 +1,22 @@
 from django.db import models
 
-# Create your models here.
+
+# Collection ORM Model
+class Collection(models.Model):
+  title= models.CharField(max_length= 255) 
+
+# Product ORM Model
 class Product(models.Model):
   title = models.CharField(max_length=255)
   description = models.TextField()
-  price = models.DecimalField(max_digits= 8, decimal_places=2)
+  price = models.DecimalField(max_digits= 6, decimal_places=2)
   invetory = models.IntegerField()
   last_update = models.DateTimeField(auto_now= True)
+  
+  # many-to-one association with Collection model
+  collection = models.ForeignKey(Collection,  on_delete= models.PROTECT)
 
+# Customer ORM Model
 class Customer(models.Model):
   MEMBERSHIP_BRONZE = 'B'
   MEMBERSHIP_SLIVER = 'S'
@@ -26,6 +35,8 @@ class Customer(models.Model):
   birth_date = models.DateTimeField(null= True)
   membership = models.CharField(max_length= 1, choices= MEMBERSHIP_CHOICES, default= MEMBERSHIP_BRONZE)
 
+
+# Order ORM Model
 class Order(models.Model):
   PAYMENT_STATUS_PENDING = 'P'
   PAYMENT_STATUS_COMPLETED = 'C'
@@ -38,8 +49,38 @@ class Order(models.Model):
   ]
   placed_at = models.DateTimeField(auto_now_add= True)
   payment_status = models.CharField(max_length= 1, choices= PAYMENT_STATUS_CHOICES, default= PAYMENT_STATUS_PENDING)
+  # many-to-one association with Customer model
+  customer = models.ForeignKey(Customer, on_delete= models.CASCADE)
 
+class OrderItem(models.Model):
+  # many-to-one association with Order model
+  order = models.ForeignKey(Order, on_delete= models.PROTECT)
+  # many-to-one association with Product model
+  product = models.ForeignKey(Product, on_delete= models.PROTECT) 
+  quantity = models.PositiveSmallIntegerField()
+  unit_price = models.DecimalField(max_length= 6, decimal_places= 2)
+
+
+# Address ORM Model
 class Address(models.Model):
   street = models.CharField(max_length= 255)
   city= models.CharField(max_length= 255)
+
+  # one-to-one association with Customer model
+  # customer = models.OneToOneField(Customer, on_delete= models.CASCADE)
+
+  # many-to-one association with Customer model
+  customer = models.ForeignKey(Customer, on_delete= models.CASCADE)
+
+# Cart ORM Model 
+class Cart(models.Model):
+  created_at= models.DateTimeField(auto_now_add= True)
+
+# CartItem ORM Model
+class CartItem(models.Model):
+  # many-to-one association with Cart model
+  cart= models.ForeignKey(Cart, on_delete= models.CASCADE)
+  # many-to-one association with product model
+  product= models.ForeignKey(Product, on_delete= models.CASCADE)
+  quantity= models.PositiveSmallIntegerField()
   customer= models.OneToOneField(Customer, on_delete= models.CASCADE, primary_key= True) 
