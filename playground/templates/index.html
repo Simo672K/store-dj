@@ -6,6 +6,31 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Django template</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    table {
+      border-spacing: 0;
+      font-family: roboto;
+    }
+
+    thead>tr {
+      background-color: #333;
+      color: #fff;
+    }
+
+    tbody>tr:hover {
+      background-color: #ddd !important;
+    }
+
+    tbody>tr:nth-child(even) {
+      background-color: #eee;
+    }
+  </style>
 </head>
 
 <body>
@@ -16,6 +41,29 @@
     praesentium numquam officiis omnis totam debitis nisi modi aliquid nobis, dolorem odit magni at error id
     dignissimos! Nobis, a quisquam.
   </p>
+
+  <h1>List Of Products</h1>
+  <p>A vailable products: {{count}}</p>
+  <table>
+    <thead>
+      <th>Title</th>
+      <th>Descrition</th>
+      <th>Unit Price</th>
+      <th>Inventory</th>
+      <th>Last Update</th>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td>{{ product.title }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.unit_price }}</td>
+        <td>{{ product.inventory }}</td>
+        <td>{{ product.last_update }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </body>
 
 </html>
