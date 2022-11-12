@@ -13,6 +13,12 @@ class Collection(models.Model):
   # related_name= '+' -> do not create a reverse relationship in the related class
   featured_product= models.ForeignKey('Product', on_delete= models.SET_NULL, null=True, related_name='+')
 
+  def __str__(self) -> str:
+    return self.title
+
+  class Meta:
+    ordering = ['title']
+
 # Product ORM Model
 class Product(models.Model):
   title = models.CharField(max_length=255)
@@ -29,6 +35,12 @@ class Product(models.Model):
   # realated_name= 'field_name' is used for naming the related field on the other model of the relationship
   promotions = models.ManyToManyField(Promotion)
 
+  def __str__(self) -> str:
+    return self.title
+
+  class Meta:
+    ordering= ['title']
+
 # Customer ORM Model
 class Customer(models.Model):
   MEMBERSHIP_BRONZE = 'B'
@@ -38,8 +50,8 @@ class Customer(models.Model):
   # Membership types 
   MEMBERSHIP_CHOICES= [
     (MEMBERSHIP_BRONZE, 'Bronze'),
-    (MEMBERSHIP_SLIVER, 'Bronze'),
-    (MEMBERSHIP_GOLD, 'Bronze'),
+    (MEMBERSHIP_SLIVER, 'Silver'),
+    (MEMBERSHIP_GOLD, 'Gold'),
   ]
   first_name = models.CharField(max_length = 255)
   last_name = models.CharField(max_length = 255)
@@ -47,6 +59,9 @@ class Customer(models.Model):
   phone = models.CharField(max_length= 255)
   birth_date = models.DateTimeField(null= True)
   membership = models.CharField(max_length= 1, choices= MEMBERSHIP_CHOICES, default= MEMBERSHIP_BRONZE)
+
+  def __str__(self):
+    return f'{self.first_name} {self.last_name}'
 
 
 # Order ORM Model

@@ -1,12 +1,17 @@
 from django.shortcuts import render
-from store.models import Product
+from django.db.models import Q
+from store.models import Product, Order
 
 # Create your views here.
 def hello(request):
-  products = Product.objects.filter(title__icontains= 'beef')
+  # select_related -> many-to-one
+  # prefetch_related -> many-to-many
+  # products=  Product.objects.select_related('collection').all()
+  orders = Order.objects.prefetch_related("orderitem_set").order_by('placed_at')[:5]
+  
 
   context= {
-    "products": list(products),
-    "count": products.count(),
+    "orders": list(orders),
+    "count": orders.count(),
   }
   return render(request, "index.html", context)
